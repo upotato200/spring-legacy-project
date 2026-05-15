@@ -56,7 +56,7 @@
       <div class="row">
         <div class="col-xs-8">
           <div class="checkbox">
-            <label><input type="checkbox" name="remember-me"> 로그인 유지</label>
+            <label><input type="checkbox" name="remember-me"> 로그인 유지 (7일)</label>
           </div>
         </div>
         <div class="col-xs-4">

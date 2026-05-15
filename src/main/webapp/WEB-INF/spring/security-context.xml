@@ -46,6 +46,12 @@
 
 		<access-denied-handler ref="accessDeniedHandler"/>
 
+		<!-- 로그인 유지 (7일) -->
+		<remember-me
+			key="portalRememberMeKey"
+			token-validity-seconds="604800"
+			user-service-ref="customUserDetailsService"/>
+
 		<!-- CSRF: REST/Ajax 혼용 환경이므로 비활성화, 필요 시 활성화 후 토큰 처리 -->
 		<csrf disabled="true"/>
 

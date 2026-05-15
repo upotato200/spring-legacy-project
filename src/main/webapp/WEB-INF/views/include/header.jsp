@@ -55,6 +55,7 @@
             <ul class="dropdown-menu">
               <li><a href="${pageContext.request.contextPath}/admin/dashboard"><i class="fa fa-dashboard"></i> 대시보드</a></li>
               <li><a href="${pageContext.request.contextPath}/admin/proposal/list"><i class="fa fa-list-alt"></i> 제안서 관리</a></li>
+              <li><a href="${pageContext.request.contextPath}/admin/reviewers"><i class="fa fa-users"></i> 심사자 관리</a></li>
               <li role="separator" class="divider"></li>
               <li><a href="${pageContext.request.contextPath}/admin/excel"><i class="fa fa-file-excel-o"></i> Excel 다운로드</a></li>
             </ul>

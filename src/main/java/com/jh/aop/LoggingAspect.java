@@ -34,18 +34,19 @@ public class LoggingAspect {
 
     @AfterReturning(pointcut = POINTCUT, returning = "result")
     public void logAfterReturning(JoinPoint jp, Object result) {
-        log.info("[완료] {}.{}() → {}",
+        log.info("[완료] {}.{}() → {}", new Object[]{
             jp.getTarget().getClass().getSimpleName(),
             jp.getSignature().getName(),
-            (result == null ? "void" : result.getClass().getSimpleName()));
+            (result == null ? "void" : result.getClass().getSimpleName())});
     }
 
     @AfterThrowing(pointcut = POINTCUT, throwing = "ex")
     public void logAfterThrowing(JoinPoint jp, Throwable ex) {
-        log.error("[예외] {}.{}() → {}",
+        String msg = String.format("[예외] %s.%s() → %s",
             jp.getTarget().getClass().getSimpleName(),
             jp.getSignature().getName(),
-            ex.getMessage(), ex);
+            ex.getMessage());
+        log.error(msg, ex);
     }
 
     /** 실행 시간 측정 (제안서 서비스만) */
@@ -56,10 +57,10 @@ public class LoggingAspect {
             return pjp.proceed();
         } finally {
             long elapsed = System.currentTimeMillis() - start;
-            log.debug("[성능] {}.{}() {}ms",
+            log.debug("[성능] {}.{}() {}ms", new Object[]{
                 pjp.getTarget().getClass().getSimpleName(),
                 pjp.getSignature().getName(),
-                elapsed);
+                elapsed});
         }
     }
 }

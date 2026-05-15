@@ -176,6 +176,13 @@
 			<artifactId>javax.inject</artifactId>
 			<version>1</version>
 		</dependency>
+
+		<!-- @Resource (javax.annotation.Resource) — Java 9+ 이후 JDK에서 제거됨 -->
+		<dependency>
+			<groupId>javax.annotation</groupId>
+			<artifactId>javax.annotation-api</artifactId>
+			<version>1.3.2</version>
+		</dependency>
 				
 		<!-- Servlet -->
 		<dependency>
