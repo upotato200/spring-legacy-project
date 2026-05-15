@@ -70,10 +70,15 @@ CREATE TABLE IF NOT EXISTS tbl_review (
     CONSTRAINT fk_review_reviewer FOREIGN KEY (reviewer_id) REFERENCES tbl_user(uid)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='심사 결과';
 
--- 6. 샘플 데이터 (개발/테스트용)
+-- 6. 관리자 계정 (비밀번호 변경 시 이 줄만 수정)
+-- ★ 관리자 ID / PW 변경 지점 ★
+INSERT INTO tbl_user (uid, upw, uname, role, enabled)
+VALUES ('whlsls3377', 'a23895524!!', '관리자', 'ROLE_ADMIN', 1)
+ON DUPLICATE KEY UPDATE
+    upw  = 'a23895524!!',
+    role = 'ROLE_ADMIN',
+    enabled = 1;
+
+-- 테스트용 일반 사용자 (운영 시 삭제 가능)
 INSERT IGNORE INTO tbl_user (uid, upw, uname, role, enabled)
-VALUES
-    ('admin',    'admin1234',    '관리자',  'ROLE_ADMIN',    1),
-    ('reviewer1','review1234',   '심사자1', 'ROLE_REVIEWER', 1),
-    ('reviewer2','review1234',   '심사자2', 'ROLE_REVIEWER', 1),
-    ('user1',    'user1234',     '홍길동',  'ROLE_USER',     1);
+VALUES ('user1', 'user1234', '홍길동', 'ROLE_USER', 1);

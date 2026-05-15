@@ -38,6 +38,53 @@
 	<select id="idCheck" resultType="UserVO">
 		select uid from tbl_user where uid = #{uid}
 	</select>
+
+	<!-- ============================================================
+	     관리자 — 심사자(ROLE_REVIEWER) 계정 관리
+	     ============================================================ -->
+
+	<!-- 심사자 전체 목록 -->
+	<select id="listReviewers" resultType="UserVO">
+		SELECT uid, uname, role, enabled
+		FROM tbl_user
+		WHERE role = 'ROLE_REVIEWER'
+		ORDER BY uid
+	</select>
+
+	<!-- 심사자 계정 생성 (관리자가 ID·PW·이름 직접 지정) -->
+	<insert id="createReviewer" parameterType="UserVO">
+		INSERT INTO tbl_user (uid, upw, uname, role, enabled)
+		VALUES (#{uid}, #{upw}, #{uname}, 'ROLE_REVIEWER', 1)
+	</insert>
+
+	<!-- 비밀번호 변경 (관리자가 초기화) -->
+	<update id="updatePassword">
+		UPDATE tbl_user
+		SET upw = #{upw}
+		WHERE uid = #{uid}
+	</update>
+
+	<!-- 계정 활성화 / 비활성화 토글 -->
+	<update id="updateEnabled">
+		UPDATE tbl_user
+		SET enabled = #{enabled}
+		WHERE uid = #{uid}
+	</update>
+
+	<!-- 심사자 계정 삭제 -->
+	<delete id="deleteReviewer" parameterType="String">
+		DELETE FROM tbl_user
+		WHERE uid = #{uid} AND role = 'ROLE_REVIEWER'
+	</delete>
+
+	<!-- 전체 사용자 목록 (관리자용) -->
+	<select id="listAllUsers" resultType="UserVO">
+		SELECT uid, uname, role, enabled
+		FROM tbl_user
+		WHERE role != 'ROLE_ADMIN'
+		ORDER BY role, uid
+	</select>
 </mapper>
+
 
 
