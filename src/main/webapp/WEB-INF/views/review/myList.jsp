@@ -55,7 +55,7 @@
                   <tr>
                     <td>
                       <a href="${pageContext.request.contextPath}/review/result/${r.pno}">
-                        ${not empty r.proposalTitle ? r.proposalTitle : '#'.concat(r.pno)}
+                        ${not empty r.proposalTitle ? r.proposalTitle : '#'}${empty r.proposalTitle ? r.pno : ''}
                       </a>
                     </td>
                     <td><strong>${r.totalScore}</strong></td>
