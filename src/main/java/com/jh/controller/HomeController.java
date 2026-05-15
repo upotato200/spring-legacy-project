@@ -22,17 +22,12 @@ public class HomeController {
 	/**
 	 * Simply selects the home view to render by returning its name.
 	 */
-	@RequestMapping(value = "/", method = RequestMethod.GET)
+	@RequestMapping(value = "/home", method = RequestMethod.GET)
 	public String home(Locale locale, Model model) {
 		logger.info("Welcome home! The client locale is {}.", locale);
-		
 		Date date = new Date();
 		DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG, locale);
-		
-		String formattedDate = dateFormat.format(date);
-		
-		model.addAttribute("serverTime", formattedDate );
-		
+		model.addAttribute("serverTime", dateFormat.format(date));
 		return "home";
 	}
 	
@@ -46,13 +41,19 @@ public class HomeController {
 	
 	@RequestMapping(value="/doB", method=RequestMethod.GET)
 	public String doB(Locale local, Model model) {
-		
-		
 		System.out.println("doB................");
-		
-		model.addAttribute("result" , "DOB RESULT");
-		
+		model.addAttribute("result", "DOB RESULT");
 		return "home";
+	}
+
+	@RequestMapping(value = "/", method = RequestMethod.GET)
+	public String root() {
+		return "redirect:/proposal/list";
+	}
+
+	@RequestMapping(value = "/common/accessDenied", method = RequestMethod.GET)
+	public String accessDenied() {
+		return "common/accessDenied";
 	}
 
 }

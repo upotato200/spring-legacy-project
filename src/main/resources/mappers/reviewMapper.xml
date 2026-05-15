@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.jh.mapper.ReviewMapper">
+
+	<!-- ============================================================
+	     심사 배정
+	     ============================================================ -->
+
+	<insert id="assign" parameterType="ReviewAssignVO">
+		INSERT IGNORE INTO tbl_review_assign (pno, reviewer_id, assigned_date)
+		VALUES (#{pno}, #{reviewerId}, NOW())
+	</insert>
+
+	<delete id="removeAssign">
+		DELETE FROM tbl_review_assign
+		WHERE pno = #{pno} AND reviewer_id = #{reviewerId}
+	</delete>
+
+	<select id="getAssignList" parameterType="int" resultType="ReviewAssignVO">
+		SELECT assign_no AS assignNo, pno, reviewer_id AS reviewerId, assigned_date AS assignedDate
+		FROM tbl_review_assign
+		WHERE pno = #{pno}
+	</select>
+
+	<!-- 심사자에게 배정된 제안서 번호 목록 -->
+	<select id="getAssignedPnoList" parameterType="String" resultType="int">
+		SELECT pno FROM tbl_review_assign WHERE reviewer_id = #{reviewerId}
+	</select>
+
+	<!-- ============================================================
+	     심사 결과 저장/수정
+	     ============================================================ -->
+
+	<insert id="submitReview" parameterType="ReviewVO">
+		INSERT INTO tbl_review
+		    (pno, reviewer_id, score_originality, score_feasibility,
+		     score_economy, score_impact, total_score, opinion, review_date)
+		VALUES
+		    (#{pno}, #{reviewerId}, #{scoreOriginality}, #{scoreFeasibility},
+		     #{scoreEconomy}, #{scoreImpact}, #{totalScore}, #{opinion}, NOW())
+		ON DUPLICATE KEY UPDATE
+		    score_originality = #{scoreOriginality},
+		    score_feasibility = #{scoreFeasibility},
+		    score_economy     = #{scoreEconomy},
+		    score_impact      = #{scoreImpact},
+		    total_score       = #{totalScore},
+		    opinion           = #{opinion},
+		    review_date       = NOW()
+	</insert>
+
+	<select id="getReview" resultType="ReviewVO">
+		SELECT rno, pno, reviewer_id AS reviewerId,
+		       score_originality AS scoreOriginality,
+		       score_feasibility AS scoreFeasibility,
+		       score_economy     AS scoreEconomy,
+		       score_impact      AS scoreImpact,
+		       total_score       AS totalScore,
+		       opinion, review_date AS reviewDate
+		FROM tbl_review
+		WHERE pno = #{pno} AND reviewer_id = #{reviewerId}
+	</select>
+
+	<select id="getReviewListByPno" parameterType="int" resultType="ReviewVO">
+		SELECT r.rno, r.pno, r.reviewer_id AS reviewerId,
+		       r.score_originality AS scoreOriginality,
+		       r.score_feasibility AS scoreFeasibility,
+		       r.score_economy     AS scoreEconomy,
+		       r.score_impact      AS scoreImpact,
+		       r.total_score       AS totalScore,
+		       r.opinion, r.review_date AS reviewDate
+		FROM tbl_review r
+		WHERE r.pno = #{pno}
+		ORDER BY r.review_date
+	</select>
+
+	<!-- 심사자가 제출한 심사 목록 -->
+	<select id="getReviewListByReviewer" parameterType="String" resultType="ReviewVO">
+		SELECT r.rno, r.pno, r.reviewer_id AS reviewerId,
+		       r.total_score AS totalScore,
+		       r.review_date AS reviewDate,
+		       p.title AS proposalTitle
+		FROM tbl_review r
+		JOIN tbl_proposal p ON r.pno = p.pno
+		WHERE r.reviewer_id = #{reviewerId}
+		ORDER BY r.review_date DESC
+	</select>
+
+	<!-- 제안서별 심사 평균 -->
+	<select id="getAverageScore" parameterType="int" resultType="double">
+		SELECT IFNULL(AVG(total_score), 0)
+		FROM tbl_review
+		WHERE pno = #{pno}
+	</select>
+
+	<!-- 심사 완료 여부 확인 (배정된 심사자 전원 제출) -->
+	<select id="getReviewCount" parameterType="int" resultType="int">
+		SELECT COUNT(*) FROM tbl_review WHERE pno = #{pno}
+	</select>
+
+	<select id="getAssignCount" parameterType="int" resultType="int">
+		SELECT COUNT(*) FROM tbl_review_assign WHERE pno = #{pno}
+	</select>
+
+	<!-- ============================================================
+	     관리자 — 심사자 목록 (ROLE_REVIEWER 사용자)
+	     ============================================================ -->
+
+	<select id="getReviewerList" resultType="UserVO">
+		SELECT uid, uname FROM tbl_user
+		WHERE role IN ('ROLE_REVIEWER', 'ROLE_ADMIN') AND enabled = 1
+		ORDER BY uname
+	</select>
+
+	<!-- Excel 출력용 전체 심사 결과 -->
+	<select id="listAllReviews" resultType="ReviewVO">
+		SELECT r.rno, r.pno, r.reviewer_id AS reviewerId,
+		       r.score_originality AS scoreOriginality,
+		       r.score_feasibility AS scoreFeasibility,
+		       r.score_economy     AS scoreEconomy,
+		       r.score_impact      AS scoreImpact,
+		       r.total_score       AS totalScore,
+		       r.opinion, r.review_date AS reviewDate,
+		       p.title AS proposalTitle
+		FROM tbl_review r
+		JOIN tbl_proposal p ON r.pno = p.pno
+		ORDER BY r.pno, r.reviewer_id
+	</select>
+
+</mapper>

@@ -1,91 +1,97 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-   
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c"        uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt"      uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="security" uri="http://www.springframework.org/security/tags"%>
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="UTF-8">
-    <title>AdminLTE 2 | Dashboard</title>
-    <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
-    <!-- Bootstrap 3.3.4 -->
-    <link href="/resources/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
-    <!-- Font Awesome Icons -->
-    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
-    <!-- Ionicons -->
-    <link href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css" rel="stylesheet" type="text/css" />
-    <!-- Theme style -->
-    <link href="/resources/dist/css/AdminLTE.min.css" rel="stylesheet" type="text/css" />
-    <!-- AdminLTE Skins. Choose a skin from the css/skins 
-         folder instead of downloading all of them to reduce the load. -->
-    <link href="/resources/dist/css/skins/_all-skins.min.css" rel="stylesheet" type="text/css" />
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>전자 제안서 접수 및 심사 포털</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+  body { padding-top: 50px; background-color: #f5f5f5; }
+  .navbar-brand { font-weight: bold; letter-spacing: 1px; }
+  .content-area { margin-top: 20px; }
+  .label-SUBMITTED { background-color: #5bc0de; }
+  .label-REVIEWING { background-color: #f0ad4e; }
+  .label-COMPLETED { background-color: #5cb85c; }
+  .label-REJECTED  { background-color: #d9534f; }
+  .panel { border-radius: 4px; }
+  .flash-msg { margin: 10px 0; }
+</style>
+</head>
+<body>
 
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-        <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-        <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-    <![endif]-->
-    
-  </head>
-      <!-- jQuery 2.1.4 -->
-    <script src="/resources/plugins/jQuery/jQuery-2.1.4.min.js"></script>
-  <body class="skin-blue sidebar-mini">
-    <div class="wrapper">
-      
-      <header class="main-header">
-        <!-- Logo -->
-        <a href="/" class="logo">
-          <!-- mini logo for sidebar mini 50x50 pixels -->
-          <span class="logo-mini">Navi</span>
-          <!-- logo for regular state and mobile devices -->
-          <span class="logo-lg"><h3>게시판 프로젝트</h3></span>
-        </a>
-        <!-- Header Navbar: style can be found in header.less -->
-        <nav class="navbar navbar-static-top" role="navigation">
-          <!-- Sidebar toggle button-->
-          <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </a>
-        </nav>
+<nav class="navbar navbar-inverse navbar-fixed-top">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#mainNav">
+        <span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="${pageContext.request.contextPath}/proposal/list">
+        <i class="fa fa-file-text-o"></i> 제안서 포털
+      </a>
+    </div>
+    <div class="collapse navbar-collapse" id="mainNav">
+      <ul class="nav navbar-nav">
+        <li><a href="${pageContext.request.contextPath}/proposal/list"><i class="fa fa-list"></i> 제안서 목록</a></li>
 
-      </header>
-      <!-- Left side column. contains the logo and sidebar -->
-      <aside class="main-sidebar">
-        <!-- sidebar: style can be found in sidebar.less -->
-        <section class="sidebar">
-          <!-- search form -->
-          <form action="#" method="get" class="sidebar-form">
-            <div class="input-group">
-              <input type="text" name="q" class="form-control" placeholder="Search..."/>
-              <span class="input-group-btn">
-                <button type='submit' name='search' id='search-btn' class="btn btn-flat"><i class="fa fa-search"></i></button>
-              </span>
-            </div>
-          </form>
-          <!-- /.search form -->
-          <!-- sidebar menu: : style can be found in sidebar.less -->
-          <ul class="sidebar-menu">
-            <li class="treeview">
-              <a href="#">
-                <span>게시물관리</span> <i class="fa fa-angle-left pull-right"></i>
-              </a>
-              <ul class="treeview-menu">
-                <li><a href="/sboard/register"><i class="fa fa-circle-o"></i> 게시물 작성</a></li>
-                <li><a href="/sboard/list"><i class="fa fa-circle-o"></i> 게시물 목록</a></li>
-              </ul>
-            </li>
-        </section>
-        <!-- /.sidebar -->
-      </aside>
+        <security:authorize access="isAuthenticated()">
+          <li><a href="${pageContext.request.contextPath}/proposal/myList"><i class="fa fa-user"></i> 내 제안서</a></li>
+          <li><a href="${pageContext.request.contextPath}/proposal/register"><i class="fa fa-plus"></i> 등록</a></li>
+        </security:authorize>
 
-      <!-- Content Wrapper. Contains page content -->
-      <div class="content-wrapper">
-        <!-- Content Header (Page header) -->
-        <section class="content-header">
-          <h1>Board Project</h1>        
-        </section>
+        <security:authorize access="hasAnyRole('ROLE_REVIEWER','ROLE_ADMIN')">
+          <li><a href="${pageContext.request.contextPath}/review/myList"><i class="fa fa-check-square-o"></i> 내 심사</a></li>
+        </security:authorize>
+
+        <security:authorize access="hasRole('ROLE_ADMIN')">
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+              <i class="fa fa-cogs"></i> 관리자 <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu">
+              <li><a href="${pageContext.request.contextPath}/admin/dashboard"><i class="fa fa-dashboard"></i> 대시보드</a></li>
+              <li><a href="${pageContext.request.contextPath}/admin/proposal/list"><i class="fa fa-list-alt"></i> 제안서 관리</a></li>
+              <li role="separator" class="divider"></li>
+              <li><a href="${pageContext.request.contextPath}/admin/excel"><i class="fa fa-file-excel-o"></i> Excel 다운로드</a></li>
+            </ul>
+          </li>
+        </security:authorize>
+      </ul>
+
+      <ul class="nav navbar-nav navbar-right">
+        <security:authorize access="isAnonymous()">
+          <li><a href="${pageContext.request.contextPath}/user/login"><i class="fa fa-sign-in"></i> 로그인</a></li>
+        </security:authorize>
+        <security:authorize access="isAuthenticated()">
+          <li>
+            <a href="#">
+              <i class="fa fa-user-circle"></i>
+              <security:authentication property="principal.username"/>
+              <security:authorize access="hasRole('ROLE_ADMIN')"> <span class="label label-danger">관리자</span></security:authorize>
+              <security:authorize access="hasRole('ROLE_REVIEWER')"> <span class="label label-warning">심사자</span></security:authorize>
+            </a>
+          </li>
+          <li>
+            <form action="${pageContext.request.contextPath}/user/logout" method="post" style="margin:0;">
+              <button type="submit" class="btn btn-link navbar-btn" style="padding:15px 15px;">
+                <i class="fa fa-sign-out"></i> 로그아웃
+              </button>
+            </form>
+          </li>
+        </security:authorize>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<div class="container content-area">
+  <c:if test="${not empty msg}">
+    <div class="alert alert-success alert-dismissible flash-msg" role="alert">
+      <button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
+      <i class="fa fa-check-circle"></i> ${msg}
+    </div>
+  </c:if>

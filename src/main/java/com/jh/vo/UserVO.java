@@ -4,7 +4,9 @@ public class UserVO {
 	private String uid;
 	private String upw;
 	private String uname;
-	private int upoint;
+	private int    upoint;
+	private String role    = "ROLE_USER";
+	private int    enabled = 1;
 	
 	public String getUid() {
 		return uid;
@@ -31,10 +33,14 @@ public class UserVO {
 		this.upoint = upoint;
 	}
 	
+	public String getRole()              { return role; }
+	public void setRole(String role)     { this.role = role; }
+
+	public int getEnabled()              { return enabled; }
+	public void setEnabled(int enabled)  { this.enabled = enabled; }
+
 	@Override
 	public String toString() {
-		
-		return "uid: "+ this.getUid() + " upw: "+ this.getUpw() + " uname: "+ this.getUname();
+		return "uid: " + uid + " uname: " + uname + " role: " + role;
 	}
-	
 }

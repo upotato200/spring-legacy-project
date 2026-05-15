@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.jh.mapper.ProposalMapper">
+
+	<!-- ============================================================
+	     제안서 CRUD
+	     ============================================================ -->
+
+	<insert id="create" parameterType="ProposalVO" useGeneratedKeys="true" keyProperty="pno">
+		INSERT INTO tbl_proposal (title, content, category, submitter, status, deadline, regdate, updatedate)
+		VALUES (#{title}, #{content}, #{category}, #{submitter}, 'SUBMITTED', #{deadline}, NOW(), NOW())
+	</insert>
+
+	<select id="read" parameterType="int" resultType="ProposalVO">
+		SELECT pno, title, content, category, submitter, status,
+		       total_score AS totalScore, deadline, regdate, updatedate
+		FROM tbl_proposal
+		WHERE pno = #{pno}
+	</select>
+
+	<update id="update" parameterType="ProposalVO">
+		UPDATE tbl_proposal
+		SET title      = #{title},
+		    content    = #{content},
+		    category   = #{category},
+		    deadline   = #{deadline},
+		    updatedate = NOW()
+		WHERE pno = #{pno}
+	</update>
+
+	<delete id="delete" parameterType="int">
+		DELETE FROM tbl_proposal WHERE pno = #{pno}
+	</delete>
+
+	<!-- ============================================================
+	     목록 조회 (페이징 + 검색)
+	     ============================================================ -->
+
+	<sql id="searchCondition">
+		<where>
+			<if test="keyword != null and keyword != ''">
+				<choose>
+					<when test="searchType == 'T'">AND title    LIKE CONCAT('%',#{keyword},'%')</when>
+					<when test="searchType == 'S'">AND submitter LIKE CONCAT('%',#{keyword},'%')</when>
+					<otherwise>AND (title LIKE CONCAT('%',#{keyword},'%') OR submitter LIKE CONCAT('%',#{keyword},'%'))</otherwise>
+				</choose>
+			</if>
+			<if test="status != null and status != ''">
+				AND status = #{status}
+			</if>
+			<if test="category != null and category != ''">
+				AND category = #{category}
+			</if>
+		</where>
+	</sql>
+
+	<select id="list" parameterType="ProposalSearchCriteria" resultType="ProposalVO">
+		SELECT pno, title, content, category, submitter, status,
+		       total_score AS totalScore, deadline, regdate, updatedate
+		FROM tbl_proposal
+		<include refid="searchCondition"/>
+		ORDER BY pno DESC
+		LIMIT #{pageStart}, #{perPageNum}
+	</select>
+
+	<select id="listBySubmitter" resultType="ProposalVO">
+		SELECT pno, title, content, category, submitter, status,
+		       total_score AS totalScore, deadline, regdate, updatedate
+		FROM tbl_proposal
+		WHERE submitter = #{submitter}
+		ORDER BY pno DESC
+		LIMIT #{pageStart}, #{perPageNum}
+	</select>
+
+	<select id="getTotalCount" parameterType="ProposalSearchCriteria" resultType="int">
+		SELECT COUNT(*) FROM tbl_proposal
+		<include refid="searchCondition"/>
+	</select>
+
+	<select id="getCountBySubmitter" resultType="int">
+		SELECT COUNT(*) FROM tbl_proposal WHERE submitter = #{submitter}
+	</select>
+
+	<!-- ============================================================
+	     상태 변경
+	     ============================================================ -->
+
+	<update id="updateStatus">
+		UPDATE tbl_proposal
+		SET status = #{status}, updatedate = NOW()
+		WHERE pno = #{pno}
+	</update>
+
+	<update id="updateTotalScore">
+		UPDATE tbl_proposal
+		SET total_score = #{totalScore}, status = 'COMPLETED', updatedate = NOW()
+		WHERE pno = #{pno}
+	</update>
+
+	<!-- ============================================================
+	     첨부파일 관리
+	     ============================================================ -->
+
+	<insert id="addAttach" parameterType="ProposalAttachVO">
+		INSERT INTO tbl_proposal_attach (pno, saved_name, original_name, filesize, regdate)
+		VALUES (#{pno}, #{savedName}, #{originalName}, #{filesize}, NOW())
+	</insert>
+
+	<select id="getAttachList" parameterType="int" resultType="ProposalAttachVO">
+		SELECT ano, pno, saved_name AS savedName, original_name AS originalName,
+		       filesize, regdate
+		FROM tbl_proposal_attach
+		WHERE pno = #{pno}
+		ORDER BY ano
+	</select>
+
+	<delete id="deleteAttach" parameterType="int">
+		DELETE FROM tbl_proposal_attach WHERE ano = #{ano}
+	</delete>
+
+	<delete id="deleteAttachByPno" parameterType="int">
+		DELETE FROM tbl_proposal_attach WHERE pno = #{pno}
+	</delete>
+
+	<!-- ============================================================
+	     관리자 전체 목록 (Excel 출력용 — 페이징 없음)
+	     ============================================================ -->
+
+	<select id="listAll" resultType="ProposalVO">
+		SELECT p.pno, p.title, p.category, p.submitter, p.status,
+		       p.total_score AS totalScore, p.deadline, p.regdate
+		FROM tbl_proposal p
+		ORDER BY p.pno DESC
+	</select>
+
+</mapper>
