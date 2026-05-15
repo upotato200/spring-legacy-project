@@ -8,19 +8,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>전자 제안서 접수 및 심사 포털</title>
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-<style>
-  body { padding-top: 50px; background-color: #f5f5f5; }
-  .navbar-brand { font-weight: bold; letter-spacing: 1px; }
-  .content-area { margin-top: 20px; }
-  .label-SUBMITTED { background-color: #5bc0de; }
-  .label-REVIEWING { background-color: #f0ad4e; }
-  .label-COMPLETED { background-color: #5cb85c; }
-  .label-REJECTED  { background-color: #d9534f; }
-  .panel { border-radius: 4px; }
-  .flash-msg { margin: 10px 0; }
-</style>
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/portal.css">
 </head>
 <body>
 

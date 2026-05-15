@@ -8,8 +8,8 @@
 <head>
 <meta charset="UTF-8">
 <title>게시글 상세 페이지</title>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/3.0.1/handlebars.js"></script>
+<%-- sboard 레거시 페이지: jQuery/Handlebars 로컬 파일이 없으면 이 기능은 폐쇄망에서 동작하지 않습니다.
+     필요 시 resources/js/jquery.min.js, resources/js/handlebars.min.js 를 직접 추가하세요. --%>
 <script type="text/javascript" src="/resources/js/upload.js"></script>
 <style type="text/css">
 		.popup {position:absolute;}
