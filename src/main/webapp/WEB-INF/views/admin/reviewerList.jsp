@@ -57,7 +57,7 @@
               <th>아이디</th>
               <th>이름</th>
               <th>상태</th>
-              <th style="width:220px;">관리</th>
+              <th style="width:200px;">관리</th>
             </tr>
           </thead>
           <tbody>
@@ -81,11 +81,11 @@
                       </c:choose>
                     </td>
                     <td>
-                      <!-- 비밀번호 변경 버튼 -->
-                      <button type="button" class="btn btn-xs btn-info"
-                              data-toggle="modal" data-target="#pwModal"
-                              data-uid="${r.uid}">
-                        <i class="fa fa-key"></i> PW
+                      <!-- 정보 편집 버튼 -->
+                      <button type="button" class="btn btn-xs btn-primary"
+                              data-toggle="modal" data-target="#editModal"
+                              data-uid="${r.uid}" data-uname="${r.uname}">
+                        <i class="fa fa-pencil"></i> 편집
                       </button>
 
                       <!-- 활성/비활성 토글 -->
@@ -132,25 +132,50 @@
   </div>
 </div>
 
-<!-- 비밀번호 변경 모달 -->
-<div class="modal fade" id="pwModal" tabindex="-1" role="dialog">
-  <div class="modal-dialog modal-sm" role="document">
+<!-- 심사자 정보 편집 모달 (아이디·이름·비밀번호) -->
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
     <div class="modal-content">
-      <form id="pwForm" action="" method="post">
+      <form id="editForm" action="" method="post">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
-          <h4 class="modal-title"><i class="fa fa-key"></i> 비밀번호 변경</h4>
+          <h4 class="modal-title"><i class="fa fa-pencil"></i> 심사자 정보 편집</h4>
         </div>
         <div class="modal-body">
-          <p id="pwModalUid" class="text-muted"></p>
+          <div class="alert alert-warning" style="font-size:13px; padding:8px 12px;">
+            <i class="fa fa-exclamation-triangle"></i>
+            아이디를 변경하면 해당 심사자의 배정 및 심사 기록도 함께 변경됩니다.
+          </div>
+
+          <div class="form-group">
+            <label>아이디 <span class="text-danger">*</span></label>
+            <input type="text" id="editNewUid" name="newUid" class="form-control"
+                   placeholder="변경할 아이디" required maxlength="50">
+            <span class="help-block text-muted" style="font-size:12px;">
+              현재 아이디와 다르게 입력하면 변경됩니다.
+            </span>
+          </div>
+
+          <div class="form-group">
+            <label>이름 <span class="text-danger">*</span></label>
+            <input type="text" id="editUname" name="uname" class="form-control"
+                   placeholder="이름" required maxlength="100">
+          </div>
+
           <div class="form-group">
             <label>새 비밀번호</label>
-            <input type="password" name="newPw" class="form-control" placeholder="새 비밀번호 입력" required>
+            <input type="password" name="newPw" class="form-control"
+                   placeholder="변경할 경우만 입력 (빈칸이면 유지)">
+            <span class="help-block text-muted" style="font-size:12px;">
+              입력하지 않으면 기존 비밀번호가 유지됩니다.
+            </span>
           </div>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal">취소</button>
-          <button type="submit" class="btn btn-primary"><i class="fa fa-save"></i> 변경</button>
+          <button type="submit" class="btn btn-primary">
+            <i class="fa fa-save"></i> 저장
+          </button>
         </div>
       </form>
     </div>
@@ -160,10 +185,17 @@
 <%@ include file="/WEB-INF/views/include/footer.jsp" %>
 
 <script>
-$('#pwModal').on('show.bs.modal', function(e) {
-  var uid = $(e.relatedTarget).data('uid');
-  $('#pwModalUid').text('대상: ' + uid);
-  $('#pwForm').attr('action',
-    '${pageContext.request.contextPath}/admin/reviewers/' + uid + '/password');
+$('#editModal').on('show.bs.modal', function(e) {
+  var btn   = $(e.relatedTarget);
+  var uid   = btn.data('uid');
+  var uname = btn.data('uname');
+
+  $('#editNewUid').val(uid);
+  $('#editUname').val(uname);
+  $('#editForm').attr('action',
+    '${pageContext.request.contextPath}/admin/reviewers/' + uid + '/update');
+
+  // 비밀번호 필드 초기화
+  $(this).find('input[name=newPw]').val('');
 });
 </script>

@@ -27,4 +27,8 @@ public interface ReviewDAO {
     // 관리자 유틸
     List<UserVO> getReviewerList() throws Exception;
     List<ReviewVO> listAllReviews() throws Exception;
+
+    // 심사자 UID 변경 시 FK 연쇄 업데이트 (ON UPDATE CASCADE 미설정 대체)
+    void updateReviewerIdInAssign(String oldId, String newId) throws Exception;
+    void updateReviewerIdInReview(String oldId, String newId) throws Exception;
 }

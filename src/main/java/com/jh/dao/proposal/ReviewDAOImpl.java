@@ -92,4 +92,20 @@ public class ReviewDAOImpl implements ReviewDAO {
     public List<ReviewVO> listAllReviews() throws Exception {
         return session.selectList(NS + "listAllReviews");
     }
+
+    @Override
+    public void updateReviewerIdInAssign(String oldId, String newId) throws Exception {
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("oldId", oldId);
+        params.put("newId", newId);
+        session.update(NS + "updateReviewerIdInAssign", params);
+    }
+
+    @Override
+    public void updateReviewerIdInReview(String oldId, String newId) throws Exception {
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("oldId", oldId);
+        params.put("newId", newId);
+        session.update(NS + "updateReviewerIdInReview", params);
+    }
 }

@@ -93,4 +93,14 @@ public class UserDAOImpl implements UserDAO {
     public List<UserVO> listAllUsers() throws Exception {
         return session.selectList(NS + "listAllUsers");
     }
+
+    @Override
+    public void updateReviewerProfile(String oldUid, String newUid, String uname, String newPw) throws Exception {
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("oldUid", oldUid);
+        params.put("newUid", newUid);
+        params.put("uname",  uname);
+        params.put("newPw",  newPw);
+        session.update(NS + "updateReviewerProfile", params);
+    }
 }

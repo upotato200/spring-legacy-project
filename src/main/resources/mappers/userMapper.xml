@@ -77,6 +77,15 @@
 		WHERE uid = #{uid} AND role = 'ROLE_REVIEWER'
 	</delete>
 
+	<!-- 심사자 프로필 수정 (이름, 비밀번호) -->
+	<update id="updateReviewerProfile">
+		UPDATE tbl_user
+		SET uname = #{uname}
+		<if test="newPw != null and newPw != ''">, upw = #{newPw}</if>
+		<if test="newUid != null and newUid != oldUid">, uid = #{newUid}</if>
+		WHERE uid = #{oldUid} AND role = 'ROLE_REVIEWER'
+	</update>
+
 	<!-- 전체 사용자 목록 (관리자용) -->
 	<select id="listAllUsers" resultType="UserVO">
 		SELECT uid, uname, role, enabled

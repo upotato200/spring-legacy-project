@@ -21,4 +21,5 @@ public interface UserDAO {
 	public void updateEnabled(String uid, int enabled) throws Exception;
 	public void deleteReviewer(String uid) throws Exception;
 	public List<UserVO> listAllUsers() throws Exception;
+	public void updateReviewerProfile(String oldUid, String newUid, String uname, String newPw) throws Exception;
 }

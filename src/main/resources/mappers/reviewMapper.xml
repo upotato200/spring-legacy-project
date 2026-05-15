@@ -114,6 +114,19 @@
 		ORDER BY uname
 	</select>
 
+	<!-- 심사자 UID 변경 시 FK 연쇄 업데이트 -->
+	<update id="updateReviewerIdInAssign">
+		UPDATE tbl_review_assign
+		SET reviewer_id = #{newId}
+		WHERE reviewer_id = #{oldId}
+	</update>
+
+	<update id="updateReviewerIdInReview">
+		UPDATE tbl_review
+		SET reviewer_id = #{newId}
+		WHERE reviewer_id = #{oldId}
+	</update>
+
 	<!-- Excel 출력용 전체 심사 결과 -->
 	<select id="listAllReviews" resultType="ReviewVO">
 		SELECT r.rno, r.pno, r.reviewer_id AS reviewerId,

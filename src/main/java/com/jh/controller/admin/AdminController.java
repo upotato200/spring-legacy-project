@@ -179,4 +179,24 @@ public class AdminController {
         rttr.addFlashAttribute("msg", uid + " 계정이 삭제되었습니다.");
         return "redirect:/admin/reviewers";
     }
+
+    /** 심사자 프로필 수정 (아이디·이름·비밀번호) */
+    @RequestMapping(value = "/reviewers/{uid}/update", method = RequestMethod.POST)
+    public String updateReviewer(@PathVariable String uid,
+                                 @RequestParam String newUid,
+                                 @RequestParam String uname,
+                                 @RequestParam(required = false, defaultValue = "") String newPw,
+                                 RedirectAttributes rttr) throws Exception {
+
+        // 아이디 변경 시 중복 체크
+        if (!newUid.equals(uid) && userService.idCheck(newUid) != null) {
+            rttr.addFlashAttribute("error", "이미 사용 중인 아이디입니다: " + newUid);
+            return "redirect:/admin/reviewers";
+        }
+
+        userService.updateReviewerProfile(uid, newUid, uname, newPw);
+        rttr.addFlashAttribute("msg", uid + " 심사자 정보가 수정되었습니다."
+                + (newUid.equals(uid) ? "" : " (아이디: " + uid + " → " + newUid + ")"));
+        return "redirect:/admin/reviewers";
+    }
 }
