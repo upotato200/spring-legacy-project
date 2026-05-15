@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+	xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/security
+		http://www.springframework.org/schema/security/spring-security-4.2.xsd
+		http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<!--
+		접근 제어 규칙
+		- /admin/**      : ROLE_ADMIN 전용
+		- /review/**     : ROLE_REVIEWER 또는 ROLE_ADMIN
+		- /proposal/**   : 인증된 사용자 전체
+		- 그 외          : 모두 허용 (기존 게시판 기능 유지)
+	-->
+	<http use-expressions="true">
+		<!-- 정적 리소스 및 로그인 페이지는 모두 허용 -->
+		<intercept-url pattern="/resources/**"        access="permitAll"/>
+		<intercept-url pattern="/user/login"           access="permitAll"/>
+		<intercept-url pattern="/user/join**"          access="permitAll"/>
+		<intercept-url pattern="/common/accessDenied"  access="permitAll"/>
+
+		<!-- 포털 접근 권한 -->
+		<intercept-url pattern="/admin/**"    access="hasRole('ROLE_ADMIN')"/>
+		<intercept-url pattern="/review/**"   access="hasAnyRole('ROLE_REVIEWER','ROLE_ADMIN')"/>
+		<intercept-url pattern="/proposal/**" access="isAuthenticated()"/>
+
+		<!-- 기존 게시판 경로는 제한 없음 -->
+		<intercept-url pattern="/**" access="permitAll"/>
+
+		<form-login
+			login-page="/user/login"
+			login-processing-url="/user/loginPost"
+			username-parameter="uid"
+			password-parameter="upw"
+			default-target-url="/proposal/list"
+			authentication-failure-url="/user/login?error=true"
+			always-use-default-target="false"/>
+
+		<logout
+			logout-url="/user/logout"
+			logout-success-url="/user/login?logout=true"
+			invalidate-session="true"
+			delete-cookies="JSESSIONID"/>
+
+		<access-denied-handler ref="accessDeniedHandler"/>
+
+		<!-- CSRF: REST/Ajax 혼용 환경이므로 비활성화, 필요 시 활성화 후 토큰 처리 -->
+		<csrf disabled="true"/>
+
+		<session-management>
+			<concurrency-control max-sessions="1" expired-url="/user/login?expired=true"/>
+		</session-management>
+	</http>
+
+	<!-- PasswordEncoder: 기존 평문 패스워드와 호환 -->
+	<beans:bean id="passwordEncoder"
+		class="org.springframework.security.crypto.password.NoOpPasswordEncoder"
+		factory-method="getInstance"/>
+
+	<authentication-manager>
+		<authentication-provider user-service-ref="customUserDetailsService">
+			<password-encoder ref="passwordEncoder"/>
+		</authentication-provider>
+	</authentication-manager>
+
+	<beans:bean id="accessDeniedHandler"
+		class="com.jh.security.CustomAccessDeniedHandler"/>
+
+</beans:beans>

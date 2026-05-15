@@ -7,9 +7,16 @@
 <mapper namespace="com.jh.mapper.UserMapper">
 
 	<select id="login" resultType="UserVO">
-		select uid, upw, uname
-		from tbl_user
-		where uid = #{uid} and upw = #{upw}
+		SELECT uid, upw, uname, role, enabled
+		FROM tbl_user
+		WHERE uid = #{uid} AND upw = #{upw}
+	</select>
+
+	<!-- Spring Security UserDetailsService 용 -->
+	<select id="loadByUid" parameterType="String" resultType="UserVO">
+		SELECT uid, upw, uname, role, enabled
+		FROM tbl_user
+		WHERE uid = #{uid}
 	</select>
 	
 	<update id="keepLogin">
