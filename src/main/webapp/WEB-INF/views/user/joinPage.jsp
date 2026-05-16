@@ -9,26 +9,21 @@
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/bootstrap/css/bootstrap.min.css">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/portal.css">
 <style>
-  #idCheckMsg {
-    font-size: 13px;
-    margin-top: 5px;
-    min-height: 18px;
-    font-weight: bold;
-  }
-  .btn-check { white-space: nowrap; }
+  #idCheckMsg { font-size: 13px; margin-top: 5px; min-height: 18px; font-weight: bold; }
+  .btn-check  { white-space: nowrap; }
 </style>
 </head>
-<body>
+<body class="auth-page-body">
 
-<div class="join-box">
-  <div class="join-logo">
+<div class="auth-box" style="max-width:460px;">
+  <div class="auth-logo">
     <a href="${pageContext.request.contextPath}/proposal/list">
       <i class="fa fa-file-text-o"></i> 전자 제안서 포털
     </a>
     <small>새 계정 만들기</small>
   </div>
 
-  <div class="join-box-body">
+  <div class="auth-card">
     <form id="joinForm" action="${pageContext.request.contextPath}/user/joinUs" method="post">
 
       <%-- 아이디 + 중복확인 --%>
@@ -74,8 +69,8 @@
       </button>
     </form>
 
-    <hr>
-    <div style="text-align:center;">
+    <div class="auth-divider">
+      <hr>
       이미 계정이 있으신가요?
       <a href="${pageContext.request.contextPath}/user/login">
         <i class="fa fa-sign-in"></i> 로그인

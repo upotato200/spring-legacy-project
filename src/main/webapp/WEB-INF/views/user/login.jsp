@@ -9,16 +9,18 @@
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/bootstrap/css/bootstrap.min.css">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/portal.css">
 </head>
-<body>
-<div class="login-box">
-  <div class="login-logo">
+<body class="auth-page-body">
+
+<div class="auth-box">
+
+  <div class="auth-logo">
     <a href="${pageContext.request.contextPath}/proposal/list">
       <i class="fa fa-file-text-o"></i> 전자 제안서 포털
     </a>
+    <small>전자 제안서 접수 및 심사 시스템</small>
   </div>
 
-  <div class="login-box-body">
-    <p class="login-box-msg" style="text-align:center; color:#666; margin-bottom:20px;">로그인 후 이용하세요</p>
+  <div class="auth-card">
 
     <c:if test="${param.error != null}">
       <div class="alert alert-danger">
@@ -36,35 +38,38 @@
       </div>
     </c:if>
 
-    <%-- Spring Security form-login: action=/user/loginPost, name=uid, name=upw --%>
     <form action="${pageContext.request.contextPath}/user/loginPost" method="post">
-      <div class="form-group has-feedback">
-        <input type="text" name="uid" class="form-control" placeholder="아이디" required autofocus>
-        <span class="glyphicon glyphicon-user form-control-feedback"></span>
+      <div class="form-group">
+        <label for="uid"><i class="fa fa-user"></i> 아이디</label>
+        <input type="text" id="uid" name="uid" class="form-control"
+               placeholder="아이디를 입력하세요" required autofocus>
       </div>
-      <div class="form-group has-feedback">
-        <input type="password" name="upw" class="form-control" placeholder="비밀번호" required>
-        <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+      <div class="form-group">
+        <label for="upw"><i class="fa fa-lock"></i> 비밀번호</label>
+        <input type="password" id="upw" name="upw" class="form-control"
+               placeholder="비밀번호를 입력하세요" required>
       </div>
-      <div class="row">
-        <div class="col-xs-8">
-          <div class="checkbox">
-            <label><input type="checkbox" name="remember-me"> 로그인 유지 (7일)</label>
-          </div>
-        </div>
-        <div class="col-xs-4">
-          <button type="submit" class="btn btn-primary btn-block">로그인</button>
-        </div>
+
+      <div class="form-group" style="margin-bottom: 20px;">
+        <label style="font-weight:400; cursor:pointer;">
+          <input type="checkbox" name="remember-me"> 로그인 유지 (7일)
+        </label>
       </div>
+
+      <button type="submit" class="btn btn-primary btn-block">
+        <i class="fa fa-sign-in"></i> 로그인
+      </button>
     </form>
 
-    <hr>
-    <div style="text-align:center;">
+    <div class="auth-divider">
+      <hr>
+      계정이 없으신가요?
       <a href="${pageContext.request.contextPath}/user/joinPage">
         <i class="fa fa-user-plus"></i> 회원가입
       </a>
     </div>
   </div>
+
 </div>
 
 <script src="${pageContext.request.contextPath}/resources/js/portal.js"></script>

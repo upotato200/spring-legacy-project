@@ -419,6 +419,7 @@ label { font-weight: 600; font-size: 13px; color: var(--c-text); margin-bottom: 
   align-items: center;
   justify-content: center;
   padding: 20px;
+  padding-top: 20px !important; /* navbar 없음 — body padding-top 리셋 */
 }
 
 .auth-box {
