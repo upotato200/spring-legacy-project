@@ -62,12 +62,11 @@
 
       <div class="form-group">
         <label>파일 추가</label>
-        <div id="fileArea">
-          <input type="file" name="files" class="form-control">
-        </div>
+        <div id="fileArea"></div>
         <button type="button" class="btn btn-default btn-xs" id="addFileBtn">
           <i class="fa fa-plus"></i> 파일 추가
         </button>
+        <small class="text-muted"> PDF, DOC, HWP, XLS, PPT, ZIP 허용 (최대 30MB)</small>
       </div>
 
       <hr>
@@ -80,14 +79,38 @@
 </div>
 
 <script>
-document.getElementById('addFileBtn').addEventListener('click', function() {
+var ACCEPT = '.pdf,.doc,.docx,.hwp,.xls,.xlsx,.ppt,.pptx,.zip';
+
+function addFileRow() {
+  var row = document.createElement('div');
+  row.className = 'input-group';
+  row.style.marginBottom = '6px';
+
   var input = document.createElement('input');
   input.type = 'file';
   input.name = 'files';
   input.className = 'form-control';
-  input.style.marginTop = '5px';
-  document.getElementById('fileArea').appendChild(input);
-});
+  input.accept = ACCEPT;
+
+  var span = document.createElement('span');
+  span.className = 'input-group-btn';
+
+  var btn = document.createElement('button');
+  btn.type = 'button';
+  btn.className = 'btn btn-danger btn-sm';
+  btn.innerHTML = '<i class="fa fa-times"></i>';
+  btn.title = '제거';
+  btn.addEventListener('click', function() {
+    row.parentNode.removeChild(row);
+  });
+
+  span.appendChild(btn);
+  row.appendChild(input);
+  row.appendChild(span);
+  document.getElementById('fileArea').appendChild(row);
+}
+
+document.getElementById('addFileBtn').addEventListener('click', addFileRow);
 </script>
 
 <jsp:include page="/WEB-INF/views/include/footer.jsp"/>
