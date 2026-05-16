@@ -1,37 +1,28 @@
-# BoardSpringMVC
+# 전자 제안서 접수 및 심사 포털
 
-### Spring을 이용한 게시판 만들기
-- 개발환경
-1. DB: mysql
-2. Server: Tomcat 8.5
-3. IDE: Eclipse
-4. Framework: Spring, MyBatis
-5. 사용언어 및 라이브러리: Java JSP Javascript JSTL jQuery
+Spring Legacy MVC 기반의 전자 제안서 접수·심사·관리 시스템입니다.
 
-#### 메인화면
-![메인화면](https://user-images.githubusercontent.com/45728768/65704206-0e048d00-e0c1-11e9-84fd-982576e8802b.PNG)
+## 개발 환경
 
+| 항목 | 버전 |
+|------|------|
+| Java | 1.8 |
+| Framework | Spring MVC 4.1.7 |
+| ORM | MyBatis 3.2.8 |
+| Security | Spring Security 4.2.20 |
+| DB | MySQL|
+| Server | Tomcat 8.5 |
+| Build | Maven |
+| IDE | IntelliJ IDEA |
 
-#### 게시글목록
-![image](https://user-images.githubusercontent.com/45728768/65703922-8f0f5480-e0c0-11e9-8ae2-c7ca71bf4a12.PNG)
+## 주요 기능
 
+**제안서 관리** — 등록/수정/삭제, 파일 첨부, 페이징·검색, 상태 표시(접수/심사중/완료/반려)
 
-#### 게시글검색기능
-![image](https://user-images.githubusercontent.com/45728768/65703948-9c2c4380-e0c0-11e9-8c73-d18fed181de1.PNG)
+**심사 시스템** — 심사자 배정, 의견·점수 입력, 결과 조회
 
+**관리자** — 대시보드, 제안서 전체 관리, 심사자 계정 CRUD, Excel 다운로드
 
-#### 게시글상세보기
-![image](https://user-images.githubusercontent.com/45728768/65703981-ac442300-e0c0-11e9-9411-f159d605d2fd.PNG)
+**사용자 인증** — Spring Security, 역할 구분(일반/심사자/관리자), Remember-me, 회원가입
 
-#### 게시글댓글기능
-![image](https://user-images.githubusercontent.com/45728768/65704118-e9101a00-e0c0-11e9-9807-acd3fa8db928.png)
-
-## 주요기능
-- 댓글처리 -> RESTful 방식으로 Ajax 댓글 처리
-- 로그인기능 ->
-Spring Intercepter를 이용해서 구현
-- 검색 처리 -> MyBatis 동적 SQL을 이용
-- 댓글 조회 수 및 댓글 수 트랜잭션처리
-- 파일 업로드
-
-> 참고: 코드로 배우는 스프링 웹 프로젝트
+**폐쇄망 지원** — CDN 없이 동작 (Bootstrap·jQuery·Font Awesome 전부 로컬)
