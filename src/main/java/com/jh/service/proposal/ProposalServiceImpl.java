@@ -21,7 +21,7 @@ public class ProposalServiceImpl implements ProposalService {
     @Inject
     private ProposalDAO proposalDAO;
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public void register(ProposalVO vo, List<MultipartFile> files, String uploadPath) throws Exception {
         proposalDAO.create(vo);
@@ -45,7 +45,7 @@ public class ProposalServiceImpl implements ProposalService {
         return vo;
     }
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public void modify(ProposalVO vo, List<MultipartFile> files, String uploadPath) throws Exception {
         proposalDAO.update(vo);
@@ -60,7 +60,7 @@ public class ProposalServiceImpl implements ProposalService {
         }
     }
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public void remove(int pno, String uploadPath) throws Exception {
         List<ProposalAttachVO> attachList = proposalDAO.getAttachList(pno);
