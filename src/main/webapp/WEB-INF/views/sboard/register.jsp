@@ -5,7 +5,7 @@
 <head>
 <meta charset="UTF-8">
 <title>등록 페이지</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/3.0.1/handlebars.js"></script>
+<%-- sboard 레거시 페이지: Handlebars 로컬 파일이 없으면 폐쇄망에서 동작하지 않습니다. --%>
 <script type="text/javascript" src="/resources/js/upload.js"></script>
 <style>
 	.fileDrop {

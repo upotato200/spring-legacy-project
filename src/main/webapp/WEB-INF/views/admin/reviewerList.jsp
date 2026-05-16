@@ -185,17 +185,18 @@
 <%@ include file="/WEB-INF/views/include/footer.jsp" %>
 
 <script>
-$('#editModal').on('show.bs.modal', function(e) {
-  var btn   = $(e.relatedTarget);
-  var uid   = btn.data('uid');
-  var uname = btn.data('uname');
+portal.onModalShow('#editModal', function (e) {
+  var btn   = e.detail.relatedTarget;
+  var uid   = btn ? btn.getAttribute('data-uid')   : '';
+  var uname = btn ? btn.getAttribute('data-uname') : '';
 
-  $('#editNewUid').val(uid);
-  $('#editUname').val(uname);
-  $('#editForm').attr('action',
-    '${pageContext.request.contextPath}/admin/reviewers/' + uid + '/update');
+  document.getElementById('editNewUid').value = uid;
+  document.getElementById('editUname').value  = uname;
+  document.getElementById('editForm').action  =
+    '${pageContext.request.contextPath}/admin/reviewers/' + uid + '/update';
 
   // 비밀번호 필드 초기화
-  $(this).find('input[name=newPw]').val('');
+  var pwField = document.querySelector('#editModal input[name="newPw"]');
+  if (pwField) pwField.value = '';
 });
 </script>
