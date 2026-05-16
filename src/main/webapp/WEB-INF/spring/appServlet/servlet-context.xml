@@ -23,9 +23,9 @@
 		<beans:property name="defaultEncoding" value="UTF-8"/>
 	</beans:bean>
 
-	<!-- 파일 저장 경로 -->
+	<!-- 파일 저장 경로: 사용자 홈 하위 (C:\ 직접 접근 시 권한 오류 방지) -->
 	<beans:bean id="uploadPath" class="java.lang.String">
-		<beans:constructor-arg value="C:\uploadFiles"/>
+		<beans:constructor-arg value="#{systemProperties['user.home']}/uploadFiles"/>
 	</beans:bean>
 
 	<!-- 기존 인터셉터 (레거시 게시판용) -->
